@@ -2,6 +2,7 @@ const RESPONSE_DONE = 4;
 const STATUS_OK = 200;
 const NEW_TODO_INPUT_ID = "new_todo_input";
 const TODO_LIST_ID = "todo_div_id";
+var completed = false;
 
 //if yoyb want to run a function
 //1 window.onload -- prefered
@@ -18,39 +19,65 @@ function add_todo_element(id,todo_data_json) {
     if (parent) {
         Object.keys(todos).forEach(
             function (key) {
-                var todo_element = createToDoElement(key, todos[key]);
+                var todo_element = createToDoElement(key, todos[key],id);
                 parent.appendChild(todo_element);
             }
         )
     }
 }
 
-    function createToDoElement(id, todo_object) {
-        var todo_element = document.createElement("div");
-        todo_element.innerText = todo_object.title;
-        todo_element.setAttribute("data-id",id);
-        todo_element.setAttribute("class","todoStatus"+todo_object.status);
+    function createToDoElement(id, todo_object,parent_id) {
+        var row = document.createElement("tr");
+        var data1 = document.createElement("td");
+        var data2 = document.createElement("td");
+        var data3 = document.createElement("td");
+
+        data2.innerText = todo_object.title;
+        row.setAttribute("data-id",id);
+        row.setAttribute("class","todoStatus"+todo_object.status);
 
         if(todo_object.status == "ACTIVE"){
             //add a complete button
             var complete_button  = document.createElement("button");
-            complete_button.setAttribute("class","breathHorizontal");
+            complete_button.setAttribute("class","w3-button block w3-light-blue w3-opacity w3-section fa fa-check w3-left");
             complete_button.setAttribute("onclick","completeToDoAJAX("+id+")" );
-            complete_button.innerText = "Mark As Complete";
-            todo_element.appendChild(complete_button);
+            complete_button.setAttribute("title","Complete");
+           data1.appendChild(complete_button);
+        }
+
+        if(todo_object.status == "COMPLETE"){
+            //add a complete button
+            var active_button  = document.createElement("button");
+            active_button.setAttribute("class","w3-button block w3-green w3-opacity w3-section fa fa-check w3-left");
+            active_button.setAttribute("onclick","activeToDoAJAX("+id+")" );
+            active_button.setAttribute("title","Complete");
+            data1.appendChild(active_button);
         }
 
         if(todo_object.status != "DELETE"){
             //add a DELETE button
             var delete_button  = document.createElement("button");
-            delete_button.setAttribute("class","breathHorizontal");
+            delete_button.setAttribute("class","w3-button block w3-red w3-section w3-opacity fa fa-remove w3-right");
             delete_button.setAttribute("onclick","deleteToDoAJAX("+id+")" );
-            delete_button.innerText = "Delete";
-            todo_element.appendChild(delete_button);
+            delete_button.setAttribute("title","Delete");
+            data3.appendChild(delete_button);
         }
 
+        console.log(parent_id);
+        console.log(todo_object.status);
 
-        return todo_element;
+        if(parent_id =='todo_div_id' && todo_object.status == "ACTIVE"){
+            row.appendChild(data1);
+            row.appendChild(data2);
+            row.appendChild(data3);
+        }
+        if(parent_id =='todo_complete_div_id' && todo_object.status == "COMPLETE"){
+            row.appendChild(data1);
+            row.appendChild(data2);
+            row.appendChild(data3);
+        }
+
+        return row;
 }
 
 function getTodosAJAX() {
@@ -114,7 +141,8 @@ function completeToDoAJAX(id) {
 
         if (xhr.readyState == RESPONSE_DONE) {
             if (xhr.status == STATUS_OK) {
-                add_todo_element(TODO_LIST_ID, xhr.responseText);
+                add_todo_element('todo_complete_div_id',xhr.responseText);
+
             }
             else {
                 console.log(xhr.responseText);
