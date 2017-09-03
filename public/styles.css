@@ -13,11 +13,14 @@ div.todoStatusACTIVE{
 div.todoStatusCOMPLETE{
     color : green;
     text-decoration: line-through;
-
-
 }
 div.todoStatusDELETE{
     color : red;
     text-decoration: line-through;
-
+}
+block{display:block;width:25%}
+.sand:hover{color:#000!important;background-color:#4CAF50!important}
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+.alert{
+    display: none;
 }

@@ -16,7 +16,7 @@
 <div class="w3-top">
     <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
         <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2"
-           ><i class="fa fa-bars"></i></a>
+        ><i class="fa fa-bars"></i></a>
         <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i
                 class="fa fa-home w3-margin-right"></i>My ToDOs</a>
 
@@ -31,66 +31,41 @@
     <!-- The Grid -->
     <div class="w3-row">
         <!-- Left Column -->
-                    <div class="w3-col m3">
-                <div class="w3-card-2 w3-round w3-white w3-center">
-                    <div class="w3-container">
-                        <p>Upcoming Events:</p>
-                        <p><strong>Holiday</strong></p>
-                        <p>Friday 15:00</p>
-                        <p>
-                            <button class="w3-button w3-block w3-theme-l4">Info</button>
-                        </p>
-                    </div>
-                </div>
-                <br>
+        <div class="w3-col m3">
 
 
-                <div class="w3-card-2 w3-round">
-                    <div class="w3-white">
-                        <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
-                                class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Completed Todo
-                        </button>
-                        <div id="Demo1" class="w3-hide w3-container">
-                            <div class="w3-container w3-padding">
-                                <div>todo 1</div>
-                                <div>todo 2</div>
-                                <div class="w3-row w3-opacity">
-                                    <div class="w3-half">
-                                        <button class="w3-button w3-block w3-green w3-section" title="Mark Active"><i
-                                                class="fa fa-check"></i></button>
-                                    </div>
-                                    <div class="w3-half">
-                                        <button class="w3-button w3-block w3-red w3-section" title="Delete"><i
-                                                class="fa fa-remove"></i></button>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="w3-card-2 w3-round">
+                <div class="w3-white">
+                    <button onclick="hideFunction('completed_todos')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
+                            class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Completed Todos
+                    </button>
+                    <div id="completed_todos" class="w3-hide w3-container">
+                        <div class="w3-container w3-padding">
+                            <table id="todo_complete_div_id" width="100%"></table>
+
                         </div>
-
                     </div>
-                </div>
-                <br>
 
-                <div class="w3-card-2 w3-round">
-                    <div class="w3-white">
-                        <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
-                                class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Deleted Todo
-                        </button>
-                        <div id="Demo2" class="w3-hide w3-container">
-                            <div class="w3-container w3-padding">
-                                <div>todo 1</div>
-                                <div>todo 2</div>
-                            </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="w3-card-2 w3-round">
+                <div class="w3-white">
+                    <button onclick="hideFunction('Deleted_todos')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i
+                            class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Deleted Todos
+                    </button>
+                    <div id="Deleted_todos" class="w3-hide w3-container">
+                        <div class="w3-container w3-padding">
+                            <div id="todo_delete_div_id"></div>
                         </div>
-
                     </div>
+
                 </div>
-                <br>
+            </div>
+            <br>
 
-
-
-
-                <!-- End Left Column -->
+            <!-- End Left Column -->
         </div>
 
         <!-- Middle Column -->
@@ -100,32 +75,29 @@
                 <div class="w3-col m12">
                     <div class="w3-card-2 w3-round w3-white">
                         <div class="w3-container w3-padding">
-                            Todo Title<br>
+                            New ToDo<br>
+                            <!--
                             <p contenteditable="true" id="new_todo_input" class="w3-border w3-padding"></p>
-                            Description <br>
-                            <p contenteditable="true" id="TodoInfo" class="w3-border w3-padding"></p>
-                            <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Add Todo</button>
+                            -->
+                            <input id="new_todo_input" type="text" placeholder="  Enter Todo Title"/>
+                            <input id="todo_time" type="time">
+                            <input id="todo_date" type="date">
+
+                            <p contenteditable="true" id="TodoInfo" class="w3-border w3-padding">Description</p>
+                            <button type="button" onclick="addTodoAjax()" class="w3-button w3-theme"><i class="fa fa-pencil"></i> Add Todo
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="w3-container w3-card-2 w3-white w3-round w3-margin" ><br>
+            <div  class="w3-container w3-card-2 w3-white w3-round w3-margin">
+                <element class="w3-button w3-block w3-theme-l1 "><i
+                        class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> Active Todos
+                </element>
 
-                <div>todo 1</div>
-                <div>todo 2</div>
-                <div>todo 3</div>
-                <div>todo 4</div>
-                <div class="w3-row w3-opacity">
-                    <div class="w3-half">
-                        <button class="w3-button w3-block w3-green w3-section" title="Complete"><i
-                                class="fa fa-check"></i></button>
-                    </div>
-                    <div class="w3-half">
-                        <button class="w3-button w3-block w3-red w3-section" title="Delete"><i
-                                class="fa fa-remove"></i></button>
-                    </div>
-                </div>
+                <table id="todo_div_id" width="100%"></table>
+
             </div>
 
             <!-- End Middle Column -->
@@ -134,8 +106,21 @@
         <!-- Right Column -->
 
         <div class="w3-col m3">
+
+            <div class="w3-card-2 w3-round w3-white w3-center">
+                <div class="w3-container">
+                    <p>Upcoming Events:</p>
+                    <p><strong>Holiday</strong></p>
+                    <p>Friday 15:00</p>
+                    <p>
+                        <button onclick="showAlert('div_alert')" class="w3-button w3-block w3-theme-l4">Info</button>
+                    </p>
+                </div>
+            </div>
+            <br>
+
             <!-- Alert Box -->
-            <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+            <div id="div_alert" class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small alert" >
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
         </span>
@@ -143,17 +128,18 @@
                 <p>This is your next task.</p>
             </div>
         </div>
-            <!-- End Right Column -->
+        <!-- End Right Column -->
     </div>
 
-        <!-- End Grid -->
-    </div>
+    <!-- End Grid -->
+</div>
 
-    <!-- End Page Container -->
+<!-- End Page Container -->
 </div>
 <br>
 
 <!-- Footer -->
+<script src="script.js" type="text/javascript"></script>
 
 </body>
 </html>

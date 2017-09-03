@@ -41,7 +41,7 @@ function add_todo_element(id,todo_data_json) {
             var complete_button  = document.createElement("button");
             complete_button.setAttribute("class","w3-button block w3-light-blue w3-opacity w3-section fa fa-check w3-left");
             complete_button.setAttribute("onclick","completeToDoAJAX("+id+")" );
-            complete_button.setAttribute("title","Complete");
+            complete_button.setAttribute("title","Mark Complete");
            data1.appendChild(complete_button);
         }
 
@@ -50,7 +50,7 @@ function add_todo_element(id,todo_data_json) {
             var active_button  = document.createElement("button");
             active_button.setAttribute("class","w3-button block w3-green w3-opacity w3-section fa fa-check w3-left");
             active_button.setAttribute("onclick","activeToDoAJAX("+id+")" );
-            active_button.setAttribute("title","Complete");
+            active_button.setAttribute("title","Mark Active");
             data1.appendChild(active_button);
         }
 
@@ -63,9 +63,6 @@ function add_todo_element(id,todo_data_json) {
             data3.appendChild(delete_button);
         }
 
-        console.log(parent_id);
-        console.log(todo_object.status);
-
         if(parent_id =='todo_div_id' && todo_object.status == "ACTIVE"){
             row.appendChild(data1);
             row.appendChild(data2);
@@ -75,6 +72,10 @@ function add_todo_element(id,todo_data_json) {
             row.appendChild(data1);
             row.appendChild(data2);
             row.appendChild(data3);
+        }
+        if(parent_id =='todo_delete_div_id' && todo_object.status == "DELETED"){
+
+            row.appendChild(data2);
         }
 
         return row;
@@ -88,8 +89,9 @@ function getTodosAJAX() {
 
         if(xhr.readyState == RESPONSE_DONE){
             if(xhr.status == STATUS_OK){
-
-                add_todo_element('todo_div_id',xhr.responseText);            }
+                add_todo_element('todo_div_id',xhr.responseText);
+                add_todo_element('todo_complete_div_id',xhr.responseText);
+                add_todo_element('todo_delete_div_id', xhr.responseText);           }
         }
     }
     xhr.send(data = null);
@@ -141,8 +143,9 @@ function completeToDoAJAX(id) {
 
         if (xhr.readyState == RESPONSE_DONE) {
             if (xhr.status == STATUS_OK) {
+                add_todo_element(TODO_LIST_ID, xhr.responseText);
                 add_todo_element('todo_complete_div_id',xhr.responseText);
-
+                add_todo_element('todo_delete_div_id', xhr.responseText);
             }
             else {
                 console.log(xhr.responseText);
@@ -152,6 +155,7 @@ function completeToDoAJAX(id) {
     xhr.send(data);
 }
 
+//delete to_DO
 function deleteToDoAJAX(id) {
     //make ajax req to update todo_with above id
     //if respons is 200: refreshTodoElement
@@ -160,13 +164,15 @@ function deleteToDoAJAX(id) {
     xhr.open("DELETE", "/api/todos/"+id, true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    data = "todo_status="+encodeURI("DELETE");
+    data = "todo_status="+encodeURI("DELETED");
 
     xhr.onreadystatechange = function(){
 
         if (xhr.readyState == RESPONSE_DONE) {
             if (xhr.status == STATUS_OK) {
                 add_todo_element(TODO_LIST_ID, xhr.responseText);
+                add_todo_element('todo_complete_div_id', xhr.responseText);
+                add_todo_element('todo_delete_div_id', xhr.responseText);
             }
             else {
                 console.log(xhr.responseText);
@@ -174,4 +180,49 @@ function deleteToDoAJAX(id) {
         }
     }
     xhr.send(data);
+}
+
+//active To_Do
+function activeToDoAJAX(id) {
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", "/api/todos/"+id, true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    data = "todo_status="+encodeURI("ACTIVE");
+
+    xhr.onreadystatechange = function(){
+
+        if (xhr.readyState == RESPONSE_DONE) {
+            if (xhr.status == STATUS_OK) {
+                add_todo_element(TODO_LIST_ID, xhr.responseText);
+                add_todo_element('todo_complete_div_id',xhr.responseText);
+                add_todo_element('todo_delete_div_id', xhr.responseText);
+            }
+            else {
+                console.log(xhr.responseText);
+            }
+        }
+    }
+    xhr.send(data);
+}
+
+
+function hideFunction(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-theme-d1";
+        getTodosAJAX();
+    } else {
+        x.className = x.className.replace("w3-show", "");
+        x.previousElementSibling.className =
+            x.previousElementSibling.className.replace(" w3-theme-d1", "");
+    }
+
+}
+
+function showAlert(div) {
+    var id = document.getElementById(div);
+    id.style.display = "block";
 }
